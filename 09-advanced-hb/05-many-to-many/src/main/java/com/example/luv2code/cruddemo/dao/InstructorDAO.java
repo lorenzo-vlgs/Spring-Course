@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.example.luv2code.cruddemo.entities.Course;
 import com.example.luv2code.cruddemo.entities.Instructor;
 import com.example.luv2code.cruddemo.entities.InstructorDetail;
+import com.example.luv2code.cruddemo.entities.Student;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -117,6 +118,30 @@ public class InstructorDAO implements IDAO{
             "SELECT c FROM Course c " +
             "JOIN FETCH c.reviews " + 
             "WHERE c.id = :data"  , Course.class);
+
+        query.setParameter("data", id);
+
+        return query.getSingleResult();
+    }
+
+    @Override
+    public Course findCourseAndStudentsById(int id) {
+        TypedQuery<Course> query = entityManager.createQuery(
+            "SELECT c FROM Course c "
+            + "JOIN FETCH c.students "
+            + "WHERE c.id = :data", Course.class);
+        
+        query.setParameter("data", id);
+
+        return query.getSingleResult();
+    }
+
+    @Override
+    public Student findStudentAndCoursesById(int id) {
+        TypedQuery<Student> query = entityManager.createQuery(
+            "SELECT s FROM Student s " + 
+            "JOIN FETCH s.courses " + 
+            "WHERE s.id = :data", Student.class);
 
         query.setParameter("data", id);
 
